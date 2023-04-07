@@ -1,19 +1,19 @@
-# async-mqtt-client
+<?php
 
-### Basic usage example. Using `await` function optional, but useful
-```
+require dirname(__DIR__) . '/vendor/autoload.php';
+
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use Tsiura\MqttClient\Packets\PacketInterface;
 use React\EventLoop\Loop;
 use Tsiura\MqttClient\ConnectionOptions;
 use Tsiura\MqttClient\MqttClient;
+use Tsiura\MqttClient\Packets\PacketInterface;
 use Tsiura\PromiseWatcher\ObjectWatcher;
 use function React\Async\await;
 
-$uri = '';
+$uri = 'tcp://test.mosquitto.org:1884';
 $username = '';
 $password = '';
 $clientId = 'reactphp-mqtt';
@@ -39,9 +39,8 @@ await($client->connect());
 
 await($client->subscribe('#', function (string $data, string $topic) {
     echo sprintf('Received data [%s] for topic [%s]', $data, $topic) . PHP_EOL;
-}, PacketInterface::QOS_AT_LEAST_ONCE));
+}));
 
 $client->publish('/test', 'Hello mqtt!', PacketInterface::QOS_AT_LEAST_ONCE);
 
 $loop->run();
-```
